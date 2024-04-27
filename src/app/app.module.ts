@@ -21,7 +21,8 @@ import { DetailProductComponent } from './detail-product/detail-product.componen
   providers: [provideClientHydration()],
   bootstrap: [
     //HomeComponent
-    DetailProductComponent,
+    //DetailProductComponent
+    OrderComponent,
   ],
 })
 export class AppModule {}
