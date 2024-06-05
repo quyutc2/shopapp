@@ -1,5 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { UserService } from '../services/user.service';
+import { RegisterDTO } from '../dtos/register.dto';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +19,7 @@ export class RegisterComponent {
   isAccepted: boolean;
   dateOfBirth: Date;
 
-  constructor() {
+  constructor(private router: Router, private userService: UserService) {
     this.phone = '';
     this.password = '';
     this.retypePassword = '';
@@ -24,10 +27,10 @@ export class RegisterComponent {
     this.address = '';
     this.isAccepted = false;
     this.dateOfBirth = new Date();
-    this.dateOfBirth.setFullYear(this.dateOfBirth.getFullYear() - 18);
+    this.dateOfBirth.setFullYear(this.dateOfBirth.getFullYear() - 16);
   }
-  onPhoneChange() {
-    console.log('Phone typed: ${this.phone}');
+  onPhoneNumberChange() {
+    console.log(`Phone typed: ${this.phone}`);
   }
   register() {
     const message =
@@ -38,9 +41,38 @@ export class RegisterComponent {
       `fullName: ${this.fullName}` +
       `isAccepted: ${this.isAccepted}` +
       `dateOfBirth: ${this.dateOfBirth}`;
-    alert(message);
+    //alert(message);
+    const registerDTO: RegisterDTO = {
+      fullname: this.fullName,
+      phone_number: this.phone,
+      address: this.address,
+      password: this.password,
+      retype_password: this.retypePassword,
+      date_of_birth: this.dateOfBirth,
+      facebook_account_id: 0,
+      google_account_id: 0,
+      role_id: 1,
+    };
+    this.userService.register(registerDTO).subscribe({
+      next: (response: any) => {
+        debugger;
+        this.router.navigate(['/login']);
+
+        // Xử lý kqua trả về khi đăng ký thành công
+        if (response && (response.status === 200 || response.status === 201)) {
+          // dky thành coong chuyển qua màn login
+        } else {
+        }
+      },
+      complete: () => {
+        debugger;
+      },
+      error: (error: any) => {
+        alert(`Cannot register, error: ${error.error}`);
+      },
+    });
   }
-  checkPasswordMatch() {
+  checkPasswordsMatch() {
     if (this.password !== this.retypePassword) {
       this.registerForm.form.controls['retypePassword'].setErrors({
         passwordMismatch: true,
