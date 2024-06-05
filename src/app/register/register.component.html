@@ -10,7 +10,7 @@
             <input
               type="text"
               class="form-control"
-              [(ngModel)]="phone"
+              [(ngModel)]="phoneNumber"
               (input)="onPhoneNumberChange()"
               name="phone"
               (focus)="registerForm.form.markAsTouched()"
@@ -20,7 +20,7 @@
             <div class="divider-nospace"></div>
             <p
               class="text-danger"
-              *ngIf="phone.length < 6 && registerForm.form.touched"
+              *ngIf="phoneNumber.length < 6 && registerForm.form.touched"
             >
               Phone phải có ít nhất 6 ký tự
             </p>
